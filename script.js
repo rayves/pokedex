@@ -37,10 +37,19 @@ form.addEventListener('submit', (event) => {
         // will receive back string from API so need to convert that to JSON
         .then(createPokemonData)
         .then((pokemonData) => populatePokemonDiv(pokemonData))
+        .catch(handleError)
         .finally(() => (searchBar.value = ''));
     // empty the search bar after the value has been used to make the request
 });
 
+function handleError(error) {
+    console.log(error.message);
+    document.getElementById('main-section').innerHTML = `
+    <p style="color: red">Oops, Something went wrong</p>
+    `;
+}
+
+// function to display pokemon types in badges
 function createTypeBadges(types) {
     const badgeString = types.reduce((initial, next) => {
         const type = next.type.name;
@@ -72,6 +81,7 @@ async function createPokemonData(data) {
     return { name, types, moveName, flavor_text, pictureUrl };
 }
 
+// function to alter the main element and add pokemon card HTML
 function populatePokemonDiv(pokemonData) {
     const { name, pictureUrl, moveName, flavor_text, types } = pokemonData;
 
